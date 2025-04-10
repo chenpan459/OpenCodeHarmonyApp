@@ -6,7 +6,7 @@
 Github：https://github.com/langwudong/browser
 
 2、仿网易云音乐
-鸿蒙 ArkTs 仿网易云音乐项目，其功能包括：
+    鸿蒙 ArkTs 仿网易云音乐项目，其功能包括：
     登陆
     首页
     每日推荐
@@ -34,7 +34,8 @@ Github：https://github.com/langwudong/browser
     Github：https://github.com/WinWang/HarmoneyOpenEye
 
   4、买为
-一个仿淘宝的鸿蒙 HAP，使用 JavaScript 开发。  Github：https://github.com/aweihao/buy-it
+一个仿淘宝的鸿蒙 HAP，使用 JavaScript 开发。  
+Github：https://github.com/aweihao/buy-it
 
 
 5、仿今日头条
@@ -44,16 +45,17 @@ Github：https://github.com/langwudong/browser
     Runtime version: 17.0.6+10-b829.5 x86_64
     VM: OpenJDK 64-Bit Server VM by JetBrains s.r.o.
     Github：https://github.com/pan372728544/TodayNews_harmony
-仿唯品会
 
-6、一个鸿蒙开发的仿唯品会电商app模板，开发语言是ArkTS，目前已实现以下功能：
+6、仿唯品会
+
+ 一个鸿蒙开发的仿唯品会电商app模板，开发语言是ArkTS，目前已实现以下功能：
     推荐页-（轮播图、大牌闪购+发现好物UI、今日特卖UI-支持左右滑动、发现频道UI、广告ListUI)
     女装Tab页-（服装种类UI-支持多种分类、格状品牌展示-Grid-UI）
     男装Tab页-（瀑布流-商品卡片浏览UI、支持点击进入商品详情页[商品图+价格+标题+颜色分类+尺寸分类+数量展示]
     运动Tab页+电脑办公Tab页
     购物车页（商品数量计算 + 订单金额计算）
     个人中心页（个人头像+昵称，我的订单，功能区）
-Gitee：https://gitee.com/boring-music/ArkTS-wphui1.0。
+Gitee：https://gitee.com/boring-music/ArkTS-wphui1.0
 
 仿笔趣阁
 
