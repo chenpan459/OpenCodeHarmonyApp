@@ -1,0 +1,156 @@
+https://zhuanlan.zhihu.com/p/259816248
+
+
+配置 repo 工具
+
+如果你的Linux系统上还没有配置repo命令，需要先下载并配置repo命令行工具：
+
+
+mkdir ~/bin/
+# sudo apt install curl # 如果没有curl命令需要先下载
+curl https://gitee.com/oschina/repo/raw/fork_flow/repo-py3 > ~/bin/repo
+chmod +x ~/bin/repo
+echo 'export PATH=~/bin:$PATH'  >> ~/.bashrc
+source ~/.bashrc
+
+
+
+
+下载Harmony OS源码
+
+mkdir -p ~/harmonyos/openharmony && cd ~/harmonyos/openharmony
+sudo apt install --no-install-recommends git python # repo工具本身是python脚本，它会调用git命令下载单个代码仓
+# 开始前需要配置`user.name`和`user.email`，如果没有配置，使用如下命令进行配置：
+ git config --global user.name "cp"
+ git config --global user.email "chenpan459@foxmail.com"
+repo init -u https://gitee.com/openharmony/manifest.git -b master --no-repo-verify
+repo sync -c  # 以后每天同步远程仓的修改，只需要执行这一条命令即可
+
+
+
+
+sudo apt-get install dosfstools mtools  # 官方文档说明的两个文件系统打包工具
+sudo apt-get install zip       # 官方文档虽然没有写，但是打包rootfs过程中需要使用
+sudo apt install mtd-utils     # 3518需要打包 jffs2 镜像的mkfs.jffs2 命令，需要安装这个包
+sudo apt install build-essential # 安装gcc/g++/make等工具，ffmpeg的测试过程中需要使用链接器ld，需要这个包
+
+
+
+
+
+# 下载gn/ninja/LLVM/hc-gen包
+URL_PREFIX=https://repo.huaweicloud.com/harmonyos/compiler
+DOWNLOAD_DIR=/home/cp/work2/harmonyos/Downloads                # 下载目录，可自行修改
+TOOLCHAIN_DIR=/home/cp/work2/harmonyos/toolchain     # 工具链存放目录，可自行修改
+
+[ -e $DOWNLOAD_DIR ] || mkdir $DOWNLOAD_DIR
+[ -e $TOOLCHAIN_DIR ] || mkdir -p $TOOLCHAIN_DIR
+
+wget -P $DOWNLOAD_DIR $URL_PREFIX/gn/1523/linux/gn.1523.tar
+wget -P $DOWNLOAD_DIR $URL_PREFIX/ninja/1.9.0/linux/ninja.1.9.0.tar
+wget -P $DOWNLOAD_DIR $URL_PREFIX/clang/9.0.0-34042/linux/llvm-linux-9.0.0-34042.tar
+wget -P $DOWNLOAD_DIR $URL_PREFIX/hc-gen/0.65/linux/hc-gen-0.65-linux.tar
+
+# 编译 hi3861 需要 riscv 编译工具链
+wget -P $DOWNLOAD_DIR $URL_PREFIX/gcc_riscv32/7.3.0/linux/gcc_riscv32-linux-7.3.0.tar.gz
+
+# 解压gn/ninja/LLVM/hc-gen包：
+tar -C $TOOLCHAIN_DIR/ -xvf $DOWNLOAD_DIR/gn.1523.tar
+tar -C $TOOLCHAIN_DIR/ -xvf $DOWNLOAD_DIR/ninja.1.9.0.tar
+tar -C $TOOLCHAIN_DIR/ -xvf $DOWNLOAD_DIR/llvm-linux-9.0.0-34042.tar
+tar -C $TOOLCHAIN_DIR/ -xvf $DOWNLOAD_DIR/hc-gen-0.65-linux.tar
+tar -C $TOOLCHAIN_DIR/ -xvf $DOWNLOAD_DIR/gcc_riscv32-linux-7.3.0.tar.gz
+
+# 向 ~/.bashrc 中追加gn/ninja/LLVM/hc-gen路径配置：
+cat <<EOF >> ~/.bashrc
+TOOLCHAIN_DIR=$TOOLCHAIN_DIR
+export PATH=\$TOOLCHAIN_DIR/gn:\$PATH
+export PATH=\$TOOLCHAIN_DIR/ninja:\$PATH
+export PATH=\$TOOLCHAIN_DIR/llvm/bin:\$PATH
+export PATH=\$TOOLCHAIN_DIR/hc-gen:\$PATH
+export PATH=\$TOOLCHAIN_DIR/gcc_riscv32/bin:\$PATH
+export PATH=~/.local/bin:\$PATH       # 用户pip二进制工具目录
+EOF
+
+# 生效环境变量
+source ~/.bashrc
+
+
+
+
+mkdir /home/cp/work2/harmonyos/.pip/
+cat <<EOF > /home/cp/work2/harmonyos/.pip/pip.conf
+[global]
+index-url = https://mirrors.huaweicloud.com/repository/pypi/simple
+trusted-host = mirrors.huaweicloud.com
+timeout = 120
+EOF
+
+
+
+# 安装virtualenv
+pip3 install virtualenv
+
+# 创建使用python3.8为默认python解释器的virtualenv
+mkdir /home/cp/work2/harmonyos/venv && virtualenv -p python3.12 /home/cp/work2/harmonyos/venv
+
+# 激活 virtualenv，激活后的pip3 install会将包文件缓存到相应的子目录中
+source /home/cp/work2/harmonyos/venv/bin/activate
+
+# 安装 setuptools 和 kconfiglib
+pip3 install setuptools kconfiglib
+
+# 安装编译hi3861需要的pip包
+pip3 install scons ecdsa pycryptodome
+# pip3 install --upgrade --ignore-installed six
+
+# 可选：将激活脚本添加到 bashrc 中，下次登录默认自动激活此python虚拟环境，可以使用 deactivate 使虚拟环境无效
+cat <<EOF >> ~/.bashrc
+source /home/cp/work2/harmonyos/myvenv/bin/activate
+EOF
+
+
+
+
+
+
+
+sudo iptables -t nat -A POSTROUTING -o eth0 -j SNAT --to-source <public_ip>
+
+
+
+
+
+
+
+1、设置时间同步到rtc
+date -s "2025-04-15 15:50:00"
+hwclock -w 
+hwclock -r
+2、反复读取rtc时间会跟电脑时间慢慢的变慢几秒
+
+hwclock --show
+
+[root@Main /root]hwclock -r
+Tue Apr 15 15:37:37 2025  0.000000 seconds
+
+
+215.8
+ 23.1
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
